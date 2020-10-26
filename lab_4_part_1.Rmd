@@ -10,3 +10,48 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
+## Confidence Interval in a sample
+
+```{r}
+otter_length <- c(38, 41, 50, 27, 32, 41, 48, 60, 43)
+
+t.test(otter_length)
+```
+
+the default setting of the above, gives you the pvalue when Hnull = 0 (probability of getting a sample with otter length of 0 inches, doesnt really make sense becuase you would never have an otter with a length of 0 but that is just the default of the above formula )
+
+if you type in consol ?t.test and hit enter, it will bring up a description of the function and its default
+
+
+## T-Test (1-sample t-test)
+
+we can specify the mean we want to test - need to change the mu=
+See a claim that the mean otter length is 50 inches. We want to test that
+
+```{r}
+otter_test <- t.test(x=otter_length, # x is the sample, so x=sample, sample in this case is otter_length #using the storing operator <-, the data is being stored in the environment
+                     mu=50) # the mean you are testing
+
+t.test(x=otter_length, # do it without the storage operator for the data to come up below
+                     mu=50)
+```
+
+If pop mean really is 50 inches, then there is a 4.4% probability, that we could have taken a sample with a mean this far away in either direction (~8 inches away, because out sample mean is 42.2)
+
+
+##. Two sample t-test
+
+two herds of big horn sheep
+
+```{r}
+desert_bighorns <- c(32, 44, 18, 26, 50, 33, 42, 20)
+sierra_bighorns <- c(28, 31, 40, 42, 26, 29, 31)
+
+t.test(x=desert_bighorns, y=sierra_bighorns) #first sample is x, second sample is y
+
+```
+
+confidence internal can be negative, because this is the confidence interval of the difference of the means of the two bighorns
+
+this test was testing that the difference in means was equal to 0. 
+p-value =0.88 - this means that there is an 88% probability we could get means that are at least this different if they were drawn from populations with the same mean. --> this means there is a good chance that the two populations have the same mean - not enough evidence to reject null hypothesis
