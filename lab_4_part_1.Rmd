@@ -1,0 +1,12 @@
+---
+title: "lab4_code_along_part1"
+author: "Danielle Sclafani"
+date: "10/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
