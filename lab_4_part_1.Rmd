@@ -55,3 +55,74 @@ confidence internal can be negative, because this is the confidence interval of 
 
 this test was testing that the difference in means was equal to 0. 
 p-value =0.88 - this means that there is an 88% probability we could get means that are at least this different if they were drawn from populations with the same mean. --> this means there is a good chance that the two populations have the same mean - not enough evidence to reject null hypothesis
+
+END PART 1
+
+## Part 2. Two sample t-test
+
+create a subset of data for the two classes of cars we are interested in (SUV and compacts)
+
+```{r}
+suv_compact <- mpg %>% 
+  filter(class %in% c("suv", "compact")) # %in% means match anything in
+```
+
+
+## Exploratory Data visualization using ggplot
+
+exploratory histograms --> because important to have a visualization of the distribution of our data
+
+```{r}
+ggplot(data= suv_compact, aes(x= cty)) +
+  geom_histogram(bins = 15) +
+  facet_wrap(~class) #facet wrap by group, this gives you two histograms for each car class, first step at looking at distributions of samples
+```
+
+Using a quantile-quantile plot (QQplot) -->  graphs your sample against a perfectly normal distribution- see how linear this relationship is
+
+
+```{r}
+ggplot(data=suv_compact, aes(sample= cty)) +
+  geom_qq() +
+  facet_wrap(~class) 
+# suv looks pretty linear, compact is a little curved pretty much linear except for a few at the top that have better gas mileage- slight positive skew
+```
+
+## Descriptive statistics
+
+```{r}
+car_stats <- suv_compact %>% 
+  group_by(class) %>%  
+  summarize(mean_city = mean(cty), #give me a summary stat of the mean_city gas mileage, using =mean(cty) tells R to calculate the mean and name it mean_city
+           sd_city =sd(cty), # standard deviation of city gas mileage
+           n = n()) #calculates number of observations in each group 
+
+car_stats
+```
+
+care about sample size, the larger the sample size gets the closer our sample distribution will be to normal. Even if our graphic visual distributions do not look normal, if n is greater than 30, because of the central limit theorem, we can still use a t-test to compare the means
+
+## 2-sample t-test
+
+create my vectors containing observations for each sample (City gas mileage)
+```{r}
+compact_sample <- suv_compact %>% 
+  filter(class == "compact") %>% #filtering to compact 
+  pull(cty) #takes a single column and makes a vector, if you use select it will keep it stored as a data frame. t test needs a vector not a data frame
+
+suv_sample <- suv_compact %>% 
+  filter(class == "suv") %>% 
+  pull(cty)
+  
+t.test(x=compact_sample, y=suv_sample)
+
+```
+
+
+
+
+
+
+
+
+
